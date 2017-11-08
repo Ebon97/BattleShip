@@ -1,0 +1,39 @@
+
+using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using SwinGameSDK;
+
+static class GameLogic
+{
+	public static void Main()
+	{
+		//Opens a new Graphics Window
+		SwinGame.OpenGraphicsWindow("Battle Ships", 800, 600);
+
+		//Load Resources
+		GameResources.LoadResources();
+
+        SwinGame.PlayMusic(GameResources.GameMusic("Menu"));
+
+        //Game Loop
+       do {
+
+			SwinGame.StopMusic ();
+			SwinGame.PlayMusic (GameResources.GameMusic (GameController.MusicOption));
+			GameController.Musicstate = false;
+
+			while (!(GameController.Musicstate == true | SwinGame.WindowCloseRequested () == true | GameController.CurrentState == GameState.Quitting)) {
+				GameController.HandleUserInput ();
+				GameController.DrawScreen ();
+			}
+
+		} while (!(SwinGame.WindowCloseRequested () == true | GameController.CurrentState == GameState.Quitting));
+		SwinGame.StopMusic ();
+
+		//Free Resources and Close Audio, to end the program.
+		GameResources.FreeResources();
+	}
+}
